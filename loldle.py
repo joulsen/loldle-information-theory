@@ -51,8 +51,7 @@ def match_champion(champs, champ):
     return matches
 
 
-guess = "Ahri"
-champname = "Ahri"
+champname = "Garen"
 champ = list(filter(lambda c: c["championName"] == champname, champs))[0]
 import matplotlib.pyplot as plt
 
@@ -68,6 +67,9 @@ bar = axis.bar(range(len(lengths)), values)
 axis.set_xticks(range(len(lengths)))
 axis.set_xticklabels([c[0] for c in lengths], rotation=90)
 axis.set_title(champ["championName"])
-# for rect, label in zip(bar, )
-
-axis.annotate("█", (5, 7), color="green")
+axis.set_ylim(0, max(values)+5)
+mapping = {"O": "green", "X": "red", "P": "gold"}
+for rect, label in zip(bar, labels):
+    basex, basey = (rect.get_x(), rect.get_height()+0.5)
+    for i, char in enumerate(label):
+        axis.annotate("█", (basex, basey+0.8*i), color=mapping[char])
