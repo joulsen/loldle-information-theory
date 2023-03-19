@@ -6,9 +6,7 @@ Created on Sat Mar 18 16:52:10 2023
 """
 
 import json
-
-with open("resources/loldle-champ-data.json", "r") as file:
-    champs = json.load(file)
+from math import log
 
 
 def match_on_property(champs, prop, value):
@@ -23,7 +21,7 @@ def match_on_property(champs, prop, value):
                 matches["incorrect"].append(c)
             elif year1 < year2:
                 matches["partial"].append(c)
-        else:
+        elif type(value) == list:
             sets = [set(c[prop]), set(value)]
             intersection = sets[0].intersection(sets[1])
             if len(intersection) == 0:
@@ -32,6 +30,11 @@ def match_on_property(champs, prop, value):
                 matches["partial"].append(c)
             else:
                 matches["correct"].append(c)
+        else:
+            if c[prop] == value:
+                matches["correct"].append(c)
+            else:
+                matches["incorrect"].append(c)
     return matches
 
 
@@ -51,25 +54,32 @@ def match_champion(champs, champ):
     return matches
 
 
-champname = "Garen"
-champ = list(filter(lambda c: c["championName"] == champname, champs))[0]
-import matplotlib.pyplot as plt
+def get_bits(matches):
+    average = 0
+    for label, match in matches.items():
+        prop = len(match) / len(matches)
+        bits = log(1/prop, 2)
+        average += prop * bits
+    return average
 
 
+def get_best_guesses(champs):
+    bits = {}
+    for champ in champs:
+        champname = champ["championName"]
+        matches = match_champion(champs, champ)
+        bits[champname] = get_bits(matches)
+    return sorted(bits.items(), key=lambda c: -c[1])
 
-matches = match_champion(champs, champ)
-lengths = {k: len(v) for k, v in matches.items()}
-lengths = sorted(lengths.items(), key=lambda c: -c[1])
-labels = [c[0] for c in lengths]
-values = [c[1] for c in lengths]
-fig, axis = plt.subplots(figsize=(20,6))
-bar = axis.bar(range(len(lengths)), values)
-axis.set_xticks(range(len(lengths)))
-axis.set_xticklabels([c[0] for c in lengths], rotation=90)
-axis.set_title(champ["championName"])
-axis.set_ylim(0, max(values)+5)
-mapping = {"O": "green", "X": "red", "P": "gold"}
-for rect, label in zip(bar, labels):
-    basex, basey = (rect.get_x(), rect.get_height()+0.5)
-    for i, char in enumerate(label):
-        axis.annotate("█", (basex, basey+0.8*i), color=mapping[char])
+# with open("resources/loldle-champ-data.json", "r") as file:
+#     champs = json.load(file)
+# matches = champs
+# while True:
+#     champ = input("- Perform a guess\n")
+#     champ = [c for c in champs if c["championName"] == champ][0]
+#     matches = match_champion(matches, champ)
+#     specifier = input("- Enter specifier\n")
+#     matches = matches[specifier]
+#     guesses = get_best_guesses(matches)
+#     for i in range(min(5, len(guesses))):
+#         print(f"{guesses[i][0]} ({guesses[i][1]})")
