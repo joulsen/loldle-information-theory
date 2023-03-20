@@ -48,5 +48,6 @@ if __name__ == "__main__":
     plot_information_boxplot(guesses)
     plt.savefig("graphs/information_boxplot.png", dpi=100, bbox_inches="tight")
     with open("graphs/bits.csv", "w") as file:
+        file.write("rank,champion,entropy\n")
         for i, (c, b) in enumerate(guesses):
             file.write("{},{},{:.3f}\n".format(i+1, c, b))
