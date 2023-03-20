@@ -25,8 +25,9 @@ def plot_best_worst(guesses, n):
     best = list(reversed(guesses[:n]))
     worst = list(reversed(guesses[-n:]))
     fig, axes = plt.subplots(2, 1, figsize=(6, 10), sharex=True)
+    colors = ["#2B3467", "#EB455F"]
     for i, data in enumerate([best, worst]):
-        axes[i].barh(range(10), [c[1] for c in data])
+        axes[i].barh(range(10), [c[1] for c in data], color=colors[i])
         axes[i].set_yticks(range(10))
         axes[i].set_yticklabels([c[0] for c in data])
         axes[i].grid(axis="x")
@@ -37,6 +38,7 @@ def plot_best_worst(guesses, n):
     axes[1].set_xlabel("Information of guess [Bits]", size=14)
 
 
+
 if __name__ == "__main__":
     with open("resources/loldle-champ-data.json", "r") as file:
         champs = json.load(file)
@@ -45,3 +47,6 @@ if __name__ == "__main__":
     plt.savefig("graphs/best_worst.png", dpi=100, bbox_inches="tight")
     plot_information_boxplot(guesses)
     plt.savefig("graphs/information_boxplot.png", dpi=100, bbox_inches="tight")
+    with open("graphs/bits.csv", "w") as file:
+        for i, (c, b) in enumerate(guesses):
+            file.write("{},{},{:.3f}\n".format(i+1, c, b))

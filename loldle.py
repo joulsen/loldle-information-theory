@@ -56,8 +56,9 @@ def match_champion(champs, champ):
 
 def get_bits(matches):
     average = 0
+    n_champs = sum(map(len, matches.values()))
     for label, match in matches.items():
-        prop = len(match) / len(matches)
+        prop = len(match) / n_champs
         bits = log(1/prop, 2)
         average += prop * bits
     return average
@@ -71,15 +72,6 @@ def get_best_guesses(champs):
         bits[champname] = get_bits(matches)
     return sorted(bits.items(), key=lambda c: -c[1])
 
-# with open("resources/loldle-champ-data.json", "r") as file:
-#     champs = json.load(file)
-# matches = champs
-# while True:
-#     champ = input("- Perform a guess\n")
-#     champ = [c for c in champs if c["championName"] == champ][0]
-#     matches = match_champion(matches, champ)
-#     specifier = input("- Enter specifier\n")
-#     matches = matches[specifier]
-#     guesses = get_best_guesses(matches)
-#     for i in range(min(5, len(guesses))):
-#         print(f"{guesses[i][0]} ({guesses[i][1]})")
+if __name__ == "__main__":
+    with open("resources/loldle-champ-data.json", "r") as file:
+        champs = json.load(file)
