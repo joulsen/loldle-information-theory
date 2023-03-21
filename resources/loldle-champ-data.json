@@ -842,7 +842,6 @@
       "Zaun"
     ],
     "positions": [
-      "Jungle",
       "Top"
     ],
     "hp_min": 653,
@@ -5379,8 +5378,7 @@
       "Yordle"
     ],
     "regions": [
-      "Zaun",
-      "Piltover"
+      "Zaun"
     ],
     "positions": [
       "Middle",
