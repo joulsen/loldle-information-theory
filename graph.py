@@ -7,6 +7,7 @@ Created on Sun Mar 19 21:50:45 2023
 
 import json
 import matplotlib.pyplot as plt
+from collections import Counter
 from loldle import get_best_guesses
 
 
@@ -37,12 +38,31 @@ def plot_best_worst(guesses, n):
     axes[1].set_xlabel("Information of guess [Bits]", size=14)
 
 
+def plot_guesses_amount(amounts):
+    counter = Counter(amounts)
+    fig, axis = plt.subplots(figsize=(8, 3))
+    bar = axis.bar(counter.keys(), counter.values(), color="#2B3467")
+    axis.bar_label(bar)
+    axis.set_xticks(range(1, len(counter)+1))
+    axis.grid(axis="y")
+    axis.set_xlabel("Guesses needed")
+    axis.set_ylabel("Games")
+    axis.spines["top"].set_visible(False)
+    axis.spines["right"].set_visible(False)
+
+
 if __name__ == "__main__":
     with open("resources/loldle-champ-data.json", "r") as file:
         champs = json.load(file)
     guesses = get_best_guesses(champs)
     plot_best_worst(guesses, 10)
-    plt.savefig("graphs/best_worst.png", dpi=100, bbox_inches="tight")
+    plt.savefig("results/best_worst.png", dpi=100, bbox_inches="tight")
     plot_information_boxplot(guesses)
     plt.savefig("results/information_boxplot.png",
+                dpi=100, bbox_inches="tight")
+    with open("results/guess-order.csv", "r") as file:
+        values = list(map(lambda l: l.split(','), file.read().split('\n')))
+    amounts = [int(l[1]) for l in values[1:-1]]
+    plot_guesses_amount(amounts)
+    plt.savefig("results/guesses_needed.png",
                 dpi=100, bbox_inches="tight")

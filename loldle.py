@@ -12,8 +12,6 @@ from math import log
 def match_on_property(champs, prop, value):
     matches = {"correct": [], "partial": [], "incorrect": []}
     for c in champs:
-        if prop == "positions" and len(value) > 1 and c["championName"] == "Dr. Mundo":
-            print("Dr. Mundo")
         if prop == "release_date":
             year1 = int(c[prop][:4])
             year2 = int(value[:4])
@@ -76,8 +74,9 @@ def get_best_guesses(champs):
 if __name__ == "__main__":
     with open("resources/loldle-champ-data.json", "r") as file:
         champs = json.load(file)
-        matches = match_on_property(champs, "positions", ["Jungle", "Middle"])
-        # guesses = get_best_guesses(champs)
-        # print("rank,champion,entropy")
-        # for i, c in enumerate(guesses):
-        #     print("{},{},{:.3f}".format(i+1, c["championName"], c["bits"]))
+        talon = [c for c in champs if c["championName"] == "Talon"][0]
+        matches = match_champion(champs, talon)
+        guesses = get_best_guesses(champs)
+        print("rank,champion,entropy")
+        for i, c in enumerate(guesses):
+            print("{},{},{:.3f}".format(i+1, c["championName"], c["bits"]))
