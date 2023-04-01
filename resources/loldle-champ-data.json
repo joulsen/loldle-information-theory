@@ -5607,5 +5607,30 @@
     "range_type": [
       "Melee"
     ]
+  },
+  {
+    "championName": "Urf",
+    "originalSpecies": [
+      "Manatee"
+    ],
+    "species": [
+      "Manatee"
+    ],
+    "regions": [
+      "Runeterra"
+    ],
+    "gender": "Male",
+    "positions": [
+      "Top",
+      "Jungle",
+      "Middle",
+      "Support",
+      "Bottom"
+    ],
+    "resource": "Unknown",
+    "release_date": "2010-04-01",
+    "range_type": [
+      "Melee"
+    ]
   }
 ]

@@ -9,9 +9,9 @@ import re
 
 re_champlist = re.compile(r'=(\[\{_id:"[^{}]+championId:".+?\}\])')
 
-with open("1a6ead60.js", encoding="UTF-8") as file:
+with open("b5d.js", encoding="UTF-8") as file:
     js = file.read()
     champlist = re_champlist.findall(js)[0]
 
-with open("loldle-champ-data2.js", "w") as file:
+with open("loldle-champ-data.js", "w") as file:
     file.write(champlist)
